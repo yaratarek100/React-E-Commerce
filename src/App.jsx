@@ -9,6 +9,12 @@ import Home from "./components/Home/Home";
 import Notfound from "./components/Notfound/Notfound";
 import Products from "./components/Products/Products";
 import Register from "./components/Register/Register";
+import '@fortawesome/fontawesome-free/css/all.min.css';
+import UserContextProvider from "./context/UserContext";
+import ProtectedRoute from "./components/protectedRoute/protectedRoute";
+
+
+
 
 function App() {
   let x = createBrowserRouter([
@@ -16,11 +22,12 @@ function App() {
       path: "/",
       element: <Layout></Layout>,
       children: [
+        
         { index:true , element: <Home></Home> },
-        { path: "/products", element: <Products></Products> },
-        { path: "/brands", element: <Brands></Brands> },
-        { path: "/categories", element: <Categories></Categories> },
-        { path: "/cart", element: <Cart></Cart> },
+        { path: "/products", element: <ProtectedRoute><Products></Products></ProtectedRoute> },
+        { path: "/brands", element: <ProtectedRoute><Brands></Brands></ProtectedRoute> },
+        { path: "/categories", element: <ProtectedRoute><Categories></Categories></ProtectedRoute> },
+        { path: "/cart", element: <ProtectedRoute><Cart></Cart></ProtectedRoute> },
         { path: "/login", element: <Login></Login> },
         { path: "/register", element: <Register></Register> },
         { path: "*", element: <Notfound></Notfound> },
@@ -28,7 +35,11 @@ function App() {
     },
   ]);
 
-  return <RouterProvider router={x}></RouterProvider>;
+  return (
+    <UserContextProvider>
+      <RouterProvider router={x}></RouterProvider>
+    </UserContextProvider>
+  )
 }
 
 export default App;
